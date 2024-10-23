@@ -35,12 +35,17 @@ jobs:
       # Copy all files (including hidden ones) from sync-origin to sync-mirror
       - name: Copy files from sync-origin to sync-mirror
         run: |
+          ls -la
           cp -r sync-origin/. sync-mirror/  # 隠しファイルも含めてコピー
+          ls sync-origin -la
+          ls sync-mirror -la
 
       # Commit and Force Push changes to sync-mirror
       - name: Commit and Force Push changes to sync-mirror
         run: |
           cd sync-mirror
+          git status
           git add .
+          git status
           git commit -m "Sync from sync-origin"
           git push --force origin main
