@@ -24,8 +24,8 @@ jobs:
         run: |
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
           cd sync-mirror
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"  # ローカルにユーザー名を設定
+          git config user.email "${{ github.actor }}@users.noreply.github.com"  # ローカルにメールアドレスを設定
 
       # Remove all files in sync-mirror
       - name: Remove all files in sync-mirror
