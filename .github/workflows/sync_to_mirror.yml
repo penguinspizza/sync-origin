@@ -32,10 +32,10 @@ jobs:
           cd sync-mirror
           rm -rf *
 
-      # Copy files from sync-origin to sync-mirror
+      # Copy all files (including hidden ones) from sync-origin to sync-mirror
       - name: Copy files from sync-origin to sync-mirror
         run: |
-          cp -r sync-origin/* sync-mirror/
+          cp -r sync-origin/. sync-mirror/  # 隠しファイルも含めてコピー
 
       # Commit and Force Push changes to sync-mirror
       - name: Commit and Force Push changes to sync-mirror
