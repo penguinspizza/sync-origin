@@ -25,8 +25,7 @@ jobs:
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
           cd sync-mirror
           git config --global user.name "penguinspizza"  # グローバルにユーザー名を設定
-          git config --global user.email "penguinspizza@users.noreply.github.com"  # グローバルにメールアドレスを設定
-          git remote add origin https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git  # リモートを設定
+          git config --global user.email "penguinspizza@users.noreply.github.com"  # グローバルにメールアドレスを設定定
 
       # Remove all files in sync-mirror
       - name: Remove all files in sync-mirror
