@@ -26,6 +26,7 @@ jobs:
           cd sync-mirror
           git config --global user.name "penguinspizza"  # グローバルにユーザー名を設定
           git config --global user.email "penguinspizza@users.noreply.github.com"  # グローバルにメールアドレスを設定
+          git remote add origin https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git  # リモートを設定
 
       # Remove all files in sync-mirror
       - name: Remove all files in sync-mirror
@@ -38,10 +39,10 @@ jobs:
         run: |
           rsync -a --exclude 'sync-mirror' ./ sync-mirror/
 
-      # Commit and Push changes to sync-mirror using secrets.PAT
+      # Commit and Push changes to sync-mirror using the predefined origin
       - name: Commit and Push changes to sync-mirror
         run: |
           cd sync-mirror
           git add .
           git commit -m "Sync from sync-origin"
-          git push https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
+          git push origin main  # originを使ってpush
