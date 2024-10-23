@@ -38,10 +38,10 @@ jobs:
         run: |
           rsync -a --exclude 'sync-mirror' ./ sync-mirror/
 
-      # Commit and Push changes to sync-mirror using the predefined origin
-      - name: Commit and Push changes to sync-mirror
+      # Commit and Force Push changes to sync-mirror using the predefined origin
+      - name: Commit and Force Push changes to sync-mirror
         run: |
           cd sync-mirror
           git add .
-          git commit -m "Sync from sync-origin"
-          git push origin main  # originを使ってpush
+          git diff-index --quiet HEAD || git commit -m "Sync from sync-origin"  # 変更があればコミット
+          git push --force origin main  # 強制的にリモートにプッシュ
