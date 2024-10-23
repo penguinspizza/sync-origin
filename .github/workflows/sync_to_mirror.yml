@@ -7,42 +7,40 @@ on:
 
 jobs:
   sync:
-    if: github.repository == 'penguinspizza/sync-origin'  # この条件でsync-originに限定
-
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout sync-origin (Current Repo)
-      - name: Checkout sync-origin
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.repository }}
-          ref: main
+      # Clone sync-origin
+      - name: Clone sync-origin
+        run: |
+          git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-origin.git
+          cd sync-origin
+          git config --global user.name "penguinspizza"
+          git config --global user.email "penguinspizza@users.noreply.github.com"
 
-      # Clone sync-mirror using secrets.PAT (Personal Access Token)
+      # Clone sync-mirror
       - name: Clone sync-mirror
         run: |
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
           cd sync-mirror
-          git config --global user.name "penguinspizza"  # グローバルにユーザー名を設定
-          git config --global user.email "penguinspizza@users.noreply.github.com"  # グローバルにメールアドレスを設定
+          git config --global user.name "penguinspizza"
+          git config --global user.email "penguinspizza@users.noreply.github.com"
 
       # Remove all files in sync-mirror
       - name: Remove all files in sync-mirror
         run: |
           cd sync-mirror
-          rm -rf *  # sync-mirrorディレクトリ内の全てのファイルを削除
+          rm -rf *
 
       # Copy files from sync-origin to sync-mirror
       - name: Copy files from sync-origin to sync-mirror
         run: |
-          cp -r ../* ./  # 親ディレクトリ（sync-originの内容）からsync-mirrorへコピー
-          rm -rf ./sync-mirror  # sync-mirrorディレクトリ自体を除外
+          cp -r sync-origin/* sync-mirror/
 
-      # Commit and Force Push changes to sync-mirror using the predefined origin
+      # Commit and Force Push changes to sync-mirror
       - name: Commit and Force Push changes to sync-mirror
         run: |
           cd sync-mirror
           git add .
-          git diff-index --quiet HEAD || git commit -m "Sync from sync-origin"  # 変更があればコミット
-          git push --force origin main  # 強制的にリモートにプッシュ
+          git commit -m "Sync from sync-origin"
+          git push --force origin main
