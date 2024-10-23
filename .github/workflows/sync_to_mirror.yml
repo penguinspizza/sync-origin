@@ -44,4 +44,4 @@ jobs:
           cd sync-mirror
           git add .
           git commit -m "Sync from sync-origin"
-          git push origin main  # originを使ってpush
+          git push
