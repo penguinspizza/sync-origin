@@ -19,10 +19,10 @@ jobs:
           repository: ${{ github.repository }}
           ref: main
 
-      # Clone sync-mirror
+      # Clone sync-mirror using GITHUB_TOKEN
       - name: Clone sync-mirror
         run: |
-          git clone https://github.com/penguinspizza/sync-mirror.git
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/penguinspizza/sync-mirror.git
           cd sync-mirror
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
@@ -38,7 +38,7 @@ jobs:
         run: |
           cp -r ./* sync-mirror/
 
-      # Commit and Push changes to sync-mirror
+      # Commit and Push changes to sync-mirror using GITHUB_TOKEN
       - name: Commit and Push changes to sync-mirror
         run: |
           cd sync-mirror
