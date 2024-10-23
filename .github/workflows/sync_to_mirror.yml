@@ -32,6 +32,7 @@ jobs:
             git clone --branch $branch https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/$repo.git
             
             rsync -a --exclude '.git' sync-origin/ $repo/  # .gitフォルダを除外してコピー
+            
             cd $repo
             git config user.name "penguinspizza"
             git config user.email "72650078+penguinspizza@users.noreply.github.com"
