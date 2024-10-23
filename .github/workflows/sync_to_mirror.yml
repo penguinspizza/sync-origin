@@ -32,13 +32,10 @@ jobs:
           cd sync-mirror
           rm -rf *
 
-      # Copy all files (including hidden ones) from sync-origin to sync-mirror
-      - name: Copy files from sync-origin to sync-mirror
+      # Use rsync to copy all files from sync-origin to sync-mirror, excluding .git
+      - name: Copy files from sync-origin to sync-mirror (excluding .git)
         run: |
-          ls -la
-          cp -r sync-origin/. sync-mirror/  # 隠しファイルも含めてコピー
-          ls sync-origin -la
-          ls sync-mirror -la
+          rsync -a --exclude '.git' sync-origin/ sync-mirror/  # .gitフォルダを除外してコピー
 
       # Commit and Force Push changes to sync-mirror
       - name: Commit and Force Push changes to sync-mirror
@@ -46,6 +43,5 @@ jobs:
           cd sync-mirror
           git status
           git add .
-          git status
           git commit -m "Sync from sync-origin"
           git push --force origin main
