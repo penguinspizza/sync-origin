@@ -33,10 +33,10 @@ jobs:
           cd sync-mirror
           rm -rf *
 
-      # Copy files from sync-origin to sync-mirror
+      # Copy files from sync-origin to sync-mirror, excluding the sync-mirror directory itself
       - name: Copy files from sync-origin to sync-mirror
         run: |
-          cp -r ./* sync-mirror/
+          rsync -a --exclude 'sync-mirror' ./ sync-mirror/
 
       # Commit and Push changes to sync-mirror using secrets.PAT
       - name: Commit and Push changes to sync-mirror
