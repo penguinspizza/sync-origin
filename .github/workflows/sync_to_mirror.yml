@@ -38,11 +38,10 @@ jobs:
         run: |
           rsync -a --exclude 'sync-mirror' ./ sync-mirror/
 
-      # Pull, Commit, and Push changes to sync-mirror using the predefined origin
-      - name: Pull, Commit, and Push changes to sync-mirror
+      # Commit and Push changes to sync-mirror using the predefined origin
+      - name: Commit and Push changes to sync-mirror
         run: |
           cd sync-mirror
-          git pull --rebase origin main  # リモートの変更を取得してリベース
           git add .
-          git diff-index --quiet HEAD || git commit -m "Sync from sync-origin"  # 変更があればコミット
-          git push origin main  # リモートにプッシュ
+          git commit -m "Sync from sync-origin"
+          git push origin main  # originを使ってpush
