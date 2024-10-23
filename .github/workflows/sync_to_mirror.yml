@@ -1,0 +1,49 @@
+name: Sync sync-origin to sync-mirror
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    if: github.repository == 'penguinspizza/sync-origin'  # この条件でsync-originに限定
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout sync-origin (Current Repo)
+      - name: Checkout sync-origin
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: main
+
+      # Clone sync-mirror
+      - name: Clone sync-mirror
+        run: |
+          git clone https://github.com/penguinspizza/sync-mirror.git
+          cd sync-mirror
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      # Remove all files in sync-mirror
+      - name: Remove all files in sync-mirror
+        run: |
+          cd sync-mirror
+          rm -rf *
+
+      # Copy files from sync-origin to sync-mirror
+      - name: Copy files from sync-origin to sync-mirror
+        run: |
+          cp -r ./* sync-mirror/
+
+      # Commit and Push changes to sync-mirror
+      - name: Commit and Push changes to sync-mirror
+        run: |
+          cd sync-mirror
+          git add .
+          git commit -m "Sync from sync-origin"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
