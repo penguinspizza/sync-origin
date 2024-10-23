@@ -16,17 +16,11 @@ jobs:
       - name: Clone sync-origin
         run: |
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-origin.git
-          cd sync-origin
-          git config --global user.name "penguinspizza"
-          git config --global user.email "penguinspizza@users.noreply.github.com"
 
       # Clone sync-mirror
       - name: Clone sync-mirror
         run: |
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
-          cd sync-mirror
-          git config --global user.name "penguinspizza"
-          git config --global user.email "penguinspizza@users.noreply.github.com"
 
       # Use rsync to copy all files from sync-origin to sync-mirror, excluding .git
       - name: Copy files from sync-origin to sync-mirror (excluding .git)
