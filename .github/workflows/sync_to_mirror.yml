@@ -1,4 +1,4 @@
-name: Sync sync-origin to sync-mirror
+name: Sync sync-origin to multiple mirrors
 
 on:
   push:
@@ -17,22 +17,21 @@ jobs:
         run: |
           git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-origin.git
 
-      # Clone sync-mirror
-      - name: Clone sync-mirror
+      # Sync to multiple mirrors
+      - name: Sync to mirrors
         run: |
-          git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/sync-mirror.git
-
-      # Use rsync to copy all files from sync-origin to sync-mirror, excluding .git
-      - name: Copy files from sync-origin to sync-mirror (excluding .git)
-        run: |
-          rsync -a --exclude '.git' sync-origin/ sync-mirror/  # .gitフォルダを除外してコピー
-
-      # Commit and Force Push changes to sync-mirror
-      - name: Commit and Force Push changes to sync-mirror
-        run: |
-          cd sync-mirror
-          git config user.name "penguinspizza"
-          git config user.email "72650078+penguinspizza@users.noreply.github.com"
-          git add .
-          git commit -m "Sync from sync-origin"
-          git push origin main
+          mirrors=(
+            "sync-mirror"  # 反映先リポジトリ1
+            "sync-mirror2" # 反映先リポジトリ2
+          )
+          for repo in "${mirrors[@]}"; do
+            git clone https://penguinspizza:${{ secrets.PAT }}@github.com/penguinspizza/$repo.git
+            rsync -a --exclude '.git' sync-origin/ $repo/  # .gitフォルダを除外してコピー
+            cd $repo
+            git config user.name "penguinspizza"
+            git config user.email "72650078+penguinspizza@users.noreply.github.com"
+            git add .
+            git commit -m "Sync from sync-origin"
+            git push origin main
+            cd ..
+          done
