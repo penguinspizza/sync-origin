@@ -7,6 +7,8 @@ on:
 
 jobs:
   sync:
+    if: github.repository == 'penguinspizza/sync-origin'  # sync-originでのみ動作
+
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +28,6 @@ jobs:
           git config --global user.name "penguinspizza"
           git config --global user.email "penguinspizza@users.noreply.github.com"
 
-      # Remove all files in sync-mirror
-      - name: Remove all files in sync-mirror
-        run: |
-          cd sync-mirror
-          rm -rf *
-
       # Use rsync to copy all files from sync-origin to sync-mirror, excluding .git
       - name: Copy files from sync-origin to sync-mirror (excluding .git)
         run: |
@@ -41,7 +37,6 @@ jobs:
       - name: Commit and Force Push changes to sync-mirror
         run: |
           cd sync-mirror
-          git status
           git add .
           git commit -m "Sync from sync-origin"
           git push --force origin main
